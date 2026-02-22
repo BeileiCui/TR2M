@@ -5,11 +5,11 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-2506.13387-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2506.13387)
 
-&emsp;&ast;Equal Contribution&dagger;Corresponding Author
+&ast;Equal Contribution&emsp;&dagger;Corresponding Author
 
 </div>
 
 code will be public available upon acceptance.
 ## 📰 News
-- **2026.02.20:** 📰 TR2M is accepted at [CVPR 2026](https://cvpr.thecvf.com/Conferences/2026)!.
+- **2026.02.20:** TR2M is accepted at [CVPR 2026](https://cvpr.thecvf.com/Conferences/2026)!.
 
