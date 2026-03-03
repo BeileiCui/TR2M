@@ -11,5 +11,4 @@
 
 code will be public available upon acceptance.
 ## 📰 News
-- **2026.02.20:** TR2M is accepted at [CVPR 2026](https://cvpr.thecvf.com/Conferences/2026)!.
 
