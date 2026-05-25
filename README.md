@@ -9,6 +9,10 @@
 
 </div>
 
+<p align="center">
+  <img src="figures/overview.png" alt="TR2M overview" width="100%">
+</p>
+
 ## Overview
 
 TR2M is a generalisable framework that converts a monocular **relative** depth map into a **metric** one by predicting per-pixel rescale maps from an RGB image and a text description. Given a frozen relative-depth backbone (e.g. DepthAnything) producing a relative depth `D_r`, TR2M outputs a per-pixel **scale map** `A` and **shift map** `B`, and recovers metric depth as:
@@ -194,5 +198,6 @@ This codebase builds on the open-source releases of
 [DepthAnything](https://github.com/LiheYoung/Depth-Anything),
 [DINOv2](https://github.com/facebookresearch/dinov2),
 [CLIP](https://github.com/openai/CLIP),
-[VOID](https://github.com/alexklwong/void-dataset) and
-[MiDaS](https://github.com/isl-org/MiDaS). We thank the authors for sharing their code and models.
+[VOID](https://github.com/alexklwong/void-dataset),
+[MiDaS](https://github.com/isl-org/MiDaS) and
+[RSA](https://github.com/Adonis-galaxy/RSA). We thank the authors for sharing their code and models.
