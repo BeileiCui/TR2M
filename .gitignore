@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Logs / experiment artifacts
+*.log
+runs/
+events.out.tfevents.*
+wandb/
+
+# Model checkpoints / weights
+models/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+# Exception: the released TR2M ScaleMap weight ships with the repo
+!weights/da_s_vitl_vitl.pth
+
+# Local data
+data/
+datasets/

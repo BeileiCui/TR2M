@@ -1,0 +1,26 @@
+# Core deep-learning stack
+# Tested with: torch==2.5.0+cu118, torchvision==0.20.0+cu118, python==3.10
+torch
+torchvision
+
+# Numerics / IO
+numpy
+opencv-python
+Pillow
+h5py
+scipy
+scikit-image
+matplotlib
+tqdm
+
+# CLIP text encoder (vendored under CLIP/) requires these
+ftfy
+regex
+
+# DepthAnything backbone fetches its model card via huggingface_hub
+huggingface_hub
+
+# Argument / logging utilities
+configargparse
+tensorboardX
+inflect
