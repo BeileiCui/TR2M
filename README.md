@@ -43,7 +43,7 @@ cd tr2m
 pip install -r requirements_eval.txt
 ```
 
-The code was developed against PyTorch 2.0.1 + CUDA 11.7. `torch.hub` is used to load DINOv2 from `facebookresearch/dinov2`, so make sure the host has internet access on first run (or pre-cache the hub directory).
+The code was tested with PyTorch 2.5.0 + CUDA 11.8 on Python 3.10. `torch.hub` is used to load DINOv2 from `facebookresearch/dinov2`, so make sure the host has internet access on first run (or pre-cache the hub directory).
 
 ## Pretrained weights
 
