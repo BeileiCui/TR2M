@@ -65,7 +65,7 @@ pip install torch==2.5.0+cu118 torchvision==0.20.0+cu118 --index-url https://dow
 pip install -r requirements_eval.txt
 ```
 
-The code was tested with PyTorch 2.5.0 + CUDA 11.8 on Python 3.10. `torch.hub` is used to load DINOv2 from `facebookresearch/dinov2`, so make sure the host has internet access on first run (or pre-cache the hub directory).
+The code was tested with PyTorch 2.5.0 + CUDA 11.8 on Python 3.10 (NVIDIA RTX 4090). `torch.hub` is used to load DINOv2 from `facebookresearch/dinov2`, so make sure the host has internet access on first run (or pre-cache the hub directory).
 
 ## Pretrained weights
 
