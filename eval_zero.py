@@ -1,4 +1,5 @@
 import os
+import sys
 
 import numpy as np
 import torch
@@ -47,7 +48,7 @@ def eval(Scalemap_model, depth_model, CLIP_model, Image_f_model, dataloader_eval
     if dataset != 'simcol':
         text_list = get_text(txt_path)
 
-    for step, eval_sample_batched in tqdm(enumerate(dataloader_eval)):
+    for step, eval_sample_batched in tqdm(enumerate(dataloader_eval), file=sys.__stderr__):
         with torch.no_grad():
             image = torch.autograd.Variable(eval_sample_batched['image'].cuda())
             gt_depth = eval_sample_batched['depth']

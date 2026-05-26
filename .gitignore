@@ -30,5 +30,5 @@ checkpoints/
 !weights/da_s_vitl_vitl.pth
 
 # Local data
-data/
-datasets/
+/data/
+/datasets/

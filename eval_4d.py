@@ -1,4 +1,5 @@
 import os
+import sys
 
 import numpy as np
 import torch
@@ -74,7 +75,7 @@ def eval(Scalemap_model, depth_model, CLIP_model, Image_f_model, dataloader_eval
          vis_save_path=None, post_process=False, dataset=None):
     eval_measures = torch.zeros(10).cuda()
 
-    for step, eval_sample_batched in tqdm(enumerate(dataloader_eval.data)):
+    for step, eval_sample_batched in tqdm(enumerate(dataloader_eval.data), file=sys.__stderr__):
         with torch.no_grad():
             image = torch.autograd.Variable(eval_sample_batched['image'].cuda())
             gt_depth = eval_sample_batched['depth']
