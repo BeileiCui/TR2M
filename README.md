@@ -63,6 +63,29 @@ The frozen relative-depth backbone weights need to be downloaded separately and 
 
 DINOv2 image-encoder weights are fetched automatically by `torch.hub` on first run.
 
+## Quick demo
+
+[run.py](run.py) runs the full TR2M pipeline on a single RGB image plus a text description, and saves a 1×5 visualisation (input image, relative depth, scale map, shift map, metric depth):
+
+```bash
+python run.py \
+    --image figures/sample.jpg \
+    --text "the image shows a classroom of school" \
+    --output output.png
+```
+
+By default it loads `weights/da_s_vitl_vitl.pth` and runs at the NYU eval resolution (434×560). Common overrides:
+
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--weight` | `weights/da_s_vitl_vitl.pth` | TR2M ScaleMap weight |
+| `--output` | `output.png` | Output visualisation path |
+| `--vis_low_percentile` / `--vis_high_percentile` | `1` / `95` | Percentile range used to set the colour bars on the relative- and metric-depth panels |
+| `--input_height` / `--input_width` | `434` / `560` | Resize fed to the model; both must be multiples of 14 |
+| `--device` | `cuda` | Falls back to CPU automatically if CUDA is unavailable |
+
+The console also prints the predicted metric depth's min / mean / max in metres, which is a quick sanity check on whether the text description matched the scene scale.
+
 ## Data preparation
 
 Download the datasets you want to evaluate on and point the corresponding `--*_root` argument (or the `*_root = ...` line in the config file) at the local copy. Split files in [data_splits/](data_splits/) and per-image text descriptions in [text/text_all/](text/text_all/) are bundled with the repo and read with paths relative to the project root, so just run the eval scripts from this directory.
@@ -155,6 +178,7 @@ To dump per-sample visualisations (RGB / GT / relative depth / metric depth / sc
 ```
 eval_4d.py                in-domain evaluation (NYU/KITTI/VOID/C3VD)
 eval_zero.py              zero-shot evaluation (SUNRGB-D/iBims/DIODE/HyperSim/SimCol)
+run.py                    single-image demo (one RGB + one text description)
 options.py                CLI / config parsing (configargparse)
 scalemap_depth.py        ScaleMap (cross-attention scale+shift head used at eval)
 attention.py / block.py / pos_embed.py
