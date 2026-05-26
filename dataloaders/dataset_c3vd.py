@@ -19,10 +19,8 @@ ImageFile.LOAD_TRUNCATED_IMAGES=True
 def change_to_c3vd(args):
     args.dataset = "c3vd"
     if getattr(args, "c3vd_root", None) is None:
-        raise ValueError(
-            "--c3vd_root must be set to evaluate on c3vd. "
-            "Pass it via the config file or command line."
-        )
+        print("[skip] --c3vd_root not set, skipping c3vd.")
+        return
     args.data_path = args.c3vd_root
     args.input_height = 480
     args.input_width = 640

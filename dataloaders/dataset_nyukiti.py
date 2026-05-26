@@ -21,10 +21,7 @@ from types import SimpleNamespace
 def _require(args, attr, dataset):
     val = getattr(args, attr, None)
     if val is None:
-        raise ValueError(
-            f"--{attr} must be set to evaluate on {dataset}. "
-            f"Pass it via the config file or command line."
-        )
+        print(f"[skip] --{attr} not set, skipping {dataset}.")
     return val
 
 

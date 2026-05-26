@@ -14,7 +14,7 @@ coef_shift = 0.01
 image_channels = 1024
 text_channels = 768
 
-# Dataset roots (edit to point to your local copies)
+# Dataset roots — set only the datasets you have locally; unset roots are skipped
 nyu_root     = /path/to/nyu_depth_v2
 kitti_root   = /path/to/kitti_raw_data
 kitti_gt_root = /path/to/kitti_ground_truth

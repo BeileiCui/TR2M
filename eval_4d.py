@@ -224,17 +224,33 @@ def main(args):
 
     args.distributed = False
 
-    change_to_nyu(args)
-    dataloader_eval_nyu = MixedNYUKITTIVOIDC3VD(args, 'online_eval')
+    if getattr(args, 'nyu_root', None):
+        change_to_nyu(args)
+        dataloader_eval_nyu = MixedNYUKITTIVOIDC3VD(args, 'online_eval')
+    else:
+        dataloader_eval_nyu = None
+        print("[skip] --nyu_root not set, skipping nyu.")
 
-    change_to_kitti(args)
-    dataloader_eval_kitti = MixedNYUKITTIVOIDC3VD(args, 'online_eval')
+    if getattr(args, 'kitti_root', None) and getattr(args, 'kitti_gt_root', None):
+        change_to_kitti(args)
+        dataloader_eval_kitti = MixedNYUKITTIVOIDC3VD(args, 'online_eval')
+    else:
+        dataloader_eval_kitti = None
+        print("[skip] --kitti_root and/or --kitti_gt_root not set, skipping kitti.")
 
-    change_to_void(args)
-    dataloader_eval_void = MixedNYUKITTIVOIDC3VD(args, 'online_eval')
+    if getattr(args, 'void_root', None):
+        change_to_void(args)
+        dataloader_eval_void = MixedNYUKITTIVOIDC3VD(args, 'online_eval')
+    else:
+        dataloader_eval_void = None
+        print("[skip] --void_root not set, skipping void.")
 
-    change_to_c3vd(args)
-    dataloader_eval_c3vd = MixedNYUKITTIVOIDC3VD(args, 'online_eval_all')
+    if getattr(args, 'c3vd_root', None):
+        change_to_c3vd(args)
+        dataloader_eval_c3vd = MixedNYUKITTIVOIDC3VD(args, 'online_eval_all')
+    else:
+        dataloader_eval_c3vd = None
+        print("[skip] --c3vd_root not set, skipping c3vd.")
 
     print("Depth Model:", args.depth_model)
     if "da" in args.depth_model:
@@ -305,21 +321,25 @@ def main(args):
     Scalemap_model.eval()
 
     with torch.no_grad():
-        change_to_nyu(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_nyu, vis_save_path_nyu, post_process=False, dataset="nyu")
+        if dataloader_eval_nyu is not None:
+            change_to_nyu(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_nyu, vis_save_path_nyu, post_process=False, dataset="nyu")
 
-        change_to_kitti(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_kitti, vis_save_path_kitti, post_process=False, dataset="kitti")
+        if dataloader_eval_kitti is not None:
+            change_to_kitti(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_kitti, vis_save_path_kitti, post_process=False, dataset="kitti")
 
-        change_to_void(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_void, vis_save_path_void, post_process=False, dataset="void")
+        if dataloader_eval_void is not None:
+            change_to_void(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_void, vis_save_path_void, post_process=False, dataset="void")
 
-        change_to_c3vd(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_c3vd, vis_save_path_c3vd, post_process=False, dataset="c3vd")
+        if dataloader_eval_c3vd is not None:
+            change_to_c3vd(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_c3vd, vis_save_path_c3vd, post_process=False, dataset="c3vd")
 
 
 if __name__ == '__main__':

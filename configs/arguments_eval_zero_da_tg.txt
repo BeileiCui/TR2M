@@ -14,7 +14,7 @@ coef_shift = 0.01
 image_channels = 1024
 text_channels = 768
 
-# Zero-shot dataset roots (edit to point to your local copies)
+# Zero-shot dataset roots — set only the datasets you have locally; unset roots are skipped
 sunrgbd_root  = /path/to/SUNRGB-D
 ibims_root    = /path/to/iBims1/ibims1_core_raw
 diode_root    = /path/to/DIODE/val/outdoor

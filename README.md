@@ -72,7 +72,7 @@ DINOv2 image-encoder weights are fetched automatically by `torch.hub` on first r
 ```bash
 python run.py \
     --image figures/sample_indoor.jpg \
-    --text "The image shows a bathroom with a white sink, a white towel hanging on a rack, and a soap dispenser on the sink." \
+    --text "The image shows a classroom with rows of desks and chairs, and blue bookshelves." \
     --output output.png
 ```
 
