@@ -21,6 +21,6 @@ kitti_gt_root = /path/to/kitti_ground_truth
 void_root    = /path/to/void_release
 c3vd_root    = /path/to/C3VD_undistort
 
-# Mirror stdout/stderr to a log file. Use "auto" for logs/eval_4d_<timestamp>.log,
+# Mirror stdout/stderr to a log file. Use "auto" for logs/eval_indomain_<timestamp>.log,
 # or pass an explicit path. Comment out / leave unset to disable.
 log_file = auto

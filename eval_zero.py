@@ -18,7 +18,7 @@ from dataloaders.dataset_test import (
 )
 from dataloaders.dataset_simcol import SimCol, change_to_simcol
 
-from eval_4d import recover_image
+from eval_indomain import recover_image
 from options import MonodepthOptions
 from scalemap_depth import ScaleMapModel
 from utils import compute_errors, setup_tee_logging, visualize_eval
@@ -163,26 +163,34 @@ def main(args):
 
     torch.cuda.empty_cache()
     cudnn.benchmark = True
+    torch.backends.cuda.enable_flash_sdp(False)
+    torch.backends.cuda.enable_mem_efficient_sdp(False)
+    torch.backends.cuda.enable_cudnn_sdp(False)
 
     change_to_sunrgbd(args)
     dataloader_eval_sunrgbd = torch.utils.data.DataLoader(
-        SUNRGBDDataset(args), batch_size=1, shuffle=False, num_workers=1)
+        SUNRGBDDataset(args), batch_size=1, shuffle=False, num_workers=1) \
+        if getattr(args, 'sunrgbd_root', None) else None
 
     change_to_ibims(args)
     dataloader_eval_ibims1 = torch.utils.data.DataLoader(
-        iBims(args), batch_size=1, shuffle=False, num_workers=1)
+        iBims(args), batch_size=1, shuffle=False, num_workers=1) \
+        if getattr(args, 'ibims_root', None) else None
 
     change_to_diode_outdoor(args)
     dataloader_eval_diode_outdoor = torch.utils.data.DataLoader(
-        DIODE(args), batch_size=1, shuffle=False, num_workers=1)
+        DIODE(args), batch_size=1, shuffle=False, num_workers=1) \
+        if getattr(args, 'diode_root', None) else None
 
     change_to_hypersim(args)
     dataloader_eval_hypersim = torch.utils.data.DataLoader(
-        HyperSim(args), batch_size=1, shuffle=False, num_workers=1)
+        HyperSim(args), batch_size=1, shuffle=False, num_workers=1) \
+        if getattr(args, 'hypersim_root', None) else None
 
     change_to_simcol(args)
     dataloader_eval_simcol = torch.utils.data.DataLoader(
-        SimCol(args), batch_size=1, shuffle=False, num_workers=1)
+        SimCol(args), batch_size=1, shuffle=False, num_workers=1) \
+        if getattr(args, 'simcol_root', None) else None
 
     if "da" in args.depth_model:
         model_configs = {
@@ -247,30 +255,35 @@ def main(args):
     Scalemap_model.eval()
 
     with torch.no_grad():
-        change_to_sunrgbd(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_sunrgbd, args.txt_path_eval, vis_save_paths['sunrgbd'],
-             post_process=False, dataset=args.dataset)
+        if dataloader_eval_sunrgbd is not None:
+            change_to_sunrgbd(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_sunrgbd, args.txt_path_eval, vis_save_paths['sunrgbd'],
+                 post_process=False, dataset=args.dataset)
 
-        change_to_ibims(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_ibims1, args.txt_path_eval, vis_save_paths['ibims'],
-             post_process=False, dataset=args.dataset)
+        if dataloader_eval_ibims1 is not None:
+            change_to_ibims(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_ibims1, args.txt_path_eval, vis_save_paths['ibims'],
+                 post_process=False, dataset=args.dataset)
 
-        change_to_hypersim(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_hypersim, args.txt_path_eval, vis_save_paths['hypersim'],
-             post_process=False, dataset=args.dataset)
+        if dataloader_eval_hypersim is not None:
+            change_to_hypersim(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_hypersim, args.txt_path_eval, vis_save_paths['hypersim'],
+                 post_process=False, dataset=args.dataset)
 
-        change_to_diode_outdoor(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_diode_outdoor, args.txt_path_eval, vis_save_paths['diode_outdoor'],
-             post_process=False, dataset=args.dataset)
+        if dataloader_eval_diode_outdoor is not None:
+            change_to_diode_outdoor(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_diode_outdoor, args.txt_path_eval, vis_save_paths['diode_outdoor'],
+                 post_process=False, dataset=args.dataset)
 
-        change_to_simcol(args)
-        eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
-             dataloader_eval_simcol, None, vis_save_paths['simcol'],
-             post_process=False, dataset=args.dataset)
+        if dataloader_eval_simcol is not None:
+            change_to_simcol(args)
+            eval(Scalemap_model, depth_model, CLIP_model, Image_f_model,
+                 dataloader_eval_simcol, None, vis_save_paths['simcol'],
+                 post_process=False, dataset=args.dataset)
 
 
 if __name__ == '__main__':

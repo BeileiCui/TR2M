@@ -212,7 +212,7 @@ def main(args):
         from datetime import datetime
         log_path = args.log_file
         if log_path == 'auto':
-            log_path = f"logs/eval_4d_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+            log_path = f"logs/eval_indomain_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
         setup_tee_logging(log_path)
 
     torch.cuda.empty_cache()

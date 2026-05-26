@@ -73,7 +73,7 @@ DINOv2 image-encoder weights are fetched automatically by `torch.hub` on first r
 python run.py \
     --image figures/sample_indoor.jpg \
     --text "The image shows a classroom with rows of desks and chairs, and blue bookshelves." \
-    --output output.png
+    --output figures/sample_indoor_output.png
 ```
 
 By default it loads `weights/da_s_vitl_vitl.pth` and runs at the NYU eval resolution (434×560). Common overrides:
@@ -87,6 +87,12 @@ By default it loads `weights/da_s_vitl_vitl.pth` and runs at the NYU eval resolu
 | `--device` | `cuda` | Falls back to CPU automatically if CUDA is unavailable |
 
 The console also prints the predicted metric depth's min / mean / max in metres, which is a quick sanity check on whether the text description matched the scene scale.
+
+You should get a visualisation like this:
+
+<p align="center">
+  <img src="figures/sample_indoor_output.png" alt="TR2M demo output" width="100%">
+</p>
 
 ## Data preparation
 
@@ -103,7 +109,7 @@ Expected layout (matches the standard `nyu_depth_v2` release):
     test/                        # evaluation RGB + depth
 ```
 
-Then set `nyu_root = <NYU_ROOT>` in [configs/arguments_eval_4d_da_tg.txt](configs/arguments_eval_4d_da_tg.txt) (or pass `--nyu_root <NYU_ROOT>` on the command line).
+Then set `nyu_root = <NYU_ROOT>` in [configs/arguments_eval_indomain_da_tg.txt](configs/arguments_eval_indomain_da_tg.txt) (or pass `--nyu_root <NYU_ROOT>` on the command line).
 
 ### Example 2 — iBims-1 (zero-shot)
 
@@ -138,16 +144,16 @@ Then set `ibims_root = <IBIMS_ROOT>` in [configs/arguments_eval_zero_da_tg.txt](
 
 ### In-domain (NYU / KITTI / VOID / C3VD)
 
-Edit dataset roots in [configs/arguments_eval_4d_da_tg.txt](configs/arguments_eval_4d_da_tg.txt), then:
+Edit dataset roots in [configs/arguments_eval_indomain_da_tg.txt](configs/arguments_eval_indomain_da_tg.txt), then:
 
 ```bash
-python eval_4d.py --config configs/arguments_eval_4d_da_tg.txt
+python eval_indomain.py --config configs/arguments_eval_indomain_da_tg.txt
 ```
 
 You can also override roots from the command line:
 
 ```bash
-python eval_4d.py --config configs/arguments_eval_4d_da_tg.txt \
+python eval_indomain.py --config configs/arguments_eval_indomain_da_tg.txt \
     --nyu_root /data/nyu_depth_v2 \
     --kitti_root /data/kitti_raw \
     --kitti_gt_root /data/kitti_gt \
@@ -171,14 +177,14 @@ For each dataset, the script prints all nine metrics in the order:
 silog, abs_rel, log10, rms, sq_rel, log_rms, d1, d2, d3
 ```
 
-`eval_4d.py` additionally prints a "results-for-sheets" line per dataset with the subset of columns commonly reported in tables (e.g. for NYUD2: `d1, d2, d3, abs_rel, log10, rms`).
+`eval_indomain.py` additionally prints a "results-for-sheets" line per dataset with the subset of columns commonly reported in tables (e.g. for NYUD2: `d1, d2, d3, abs_rel, log10, rms`).
 
 To dump per-sample visualisations (RGB / GT / relative depth / metric depth / scale / shift PNGs) into `<load_ckpt_path>_vis/<dataset>/`, add `--visualize_results` to either eval command.
 
 ## Repository layout (relevant to evaluation)
 
 ```
-eval_4d.py                in-domain evaluation (NYU/KITTI/VOID/C3VD)
+eval_indomain.py          in-domain evaluation (NYU/KITTI/VOID/C3VD)
 eval_zero.py              zero-shot evaluation (SUNRGB-D/iBims/DIODE/HyperSim/SimCol)
 run.py                    single-image demo (one RGB + one text description)
 options.py                CLI / config parsing (configargparse)
