@@ -38,8 +38,10 @@ Image and text features are extracted by frozen DINOv2 and CLIP encoders, fused 
 ## Installation
 
 ```bash
-git clone <this-repo-url> tr2m
-cd tr2m
+git clone https://github.com/BeileiCui/TR2M.git
+cd TR2M
+conda create -n tr2m python=3.10 -y
+conda activate tr2m
 pip install -r requirements_eval.txt
 ```
 
