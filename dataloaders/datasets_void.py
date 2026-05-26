@@ -267,8 +267,8 @@ class KBNetTrainingDataset(Dataset):
         self.args = args
         self.image_paths = read_paths(args.data_path, args.train_image_path_void)
         self.depth_gt_paths = read_paths(args.data_path, args.train_ground_truth_path_void)
-        self.pseudo_depth_path = args.pseudo_depth_path
-        self.pseudo_dataset_path = args.pseudo_dataset_path
+        self.pseudo_depth_path = getattr(args, 'pseudo_depth_path', None)
+        self.pseudo_dataset_path = getattr(args, 'pseudo_dataset_path', None)
         self.pseudo_depth_model = args.depth_model
 
         self.transform=preprocessing_transforms_void('train')
@@ -413,8 +413,8 @@ class KBNetInferenceDataset(Dataset):
         self.args = args
         self.image_paths = read_paths(args.data_path, args.val_image_path_void)
         self.depth_gt_paths = read_paths(args.data_path, args.val_ground_truth_path_void)
-        self.pseudo_depth_path = args.pseudo_depth_path
-        self.pseudo_dataset_path = args.pseudo_dataset_path
+        self.pseudo_depth_path = getattr(args, 'pseudo_depth_path', None)
+        self.pseudo_dataset_path = getattr(args, 'pseudo_dataset_path', None)
         self.pseudo_depth_model = args.depth_model
         
         self.use_offline_pseudo_depth = self.pseudo_depth_path is not None

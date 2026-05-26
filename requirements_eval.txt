@@ -19,8 +19,12 @@ regex
 
 # DepthAnything backbone fetches its model card via huggingface_hub
 huggingface_hub
+certifi
+requests
+idna
 
 # Argument / logging utilities
 configargparse
 tensorboardX
 inflect
+packaging

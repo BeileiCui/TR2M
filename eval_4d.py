@@ -216,6 +216,10 @@ def main(args):
 
     torch.cuda.empty_cache()
     cudnn.benchmark = True
+    # Disable cuDNN/flash SDP backends to avoid compatibility issues with some driver/cuDNN versions
+    torch.backends.cuda.enable_flash_sdp(False)
+    torch.backends.cuda.enable_mem_efficient_sdp(False)
+    torch.backends.cuda.enable_cudnn_sdp(False)
 
     args.distributed = False
 
