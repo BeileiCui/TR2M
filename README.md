@@ -61,6 +61,7 @@ git clone https://github.com/BeileiCui/TR2M.git
 cd TR2M
 conda create -n tr2m python=3.10 -y
 conda activate tr2m
+pip install torch==2.5.0+cu118 torchvision==0.20.0+cu118 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements_eval.txt
 ```
 
