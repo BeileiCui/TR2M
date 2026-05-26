@@ -87,7 +87,7 @@ DINOv2 image-encoder weights are fetched automatically by `torch.hub` on first r
 
 ## Quick demo
 
-[run.py](run.py) runs the full TR2M pipeline on a single RGB image plus a text description, and saves a 1×5 visualisation (input image, relative depth, scale map, shift map, metric depth):
+[run.py](run.py) runs the full TR2M pipeline on a single RGB image plus a text description, and saves a 1×6 visualisation (text description, input image, relative depth, scale map, shift map, metric depth):
 
 ```bash
 python run.py \
