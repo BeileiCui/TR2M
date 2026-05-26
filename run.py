@@ -184,34 +184,42 @@ def percentile_range(arr, low_pct, high_pct):
     return vmin, vmax
 
 
-def save_panel(rgb, relative, scale_map, shift_map, metric, low_pct, high_pct, max_depth, min_depth, out_path):
-    fig, axes = plt.subplots(1, 5, figsize=(22, 4.5))
+def save_panel(rgb, relative, scale_map, shift_map, metric, low_pct, high_pct, max_depth, min_depth, out_path, text=''):
+    fig, axes = plt.subplots(1, 6, figsize=(26, 4.5))
 
-    axes[0].imshow(rgb)
-    axes[0].set_title('Input image')
+    # Text panel
+    axes[0].set_facecolor('#f5f5f5')
+    axes[0].text(0.5, 0.5, text, ha='center', va='center', wrap=True,
+                 fontsize=9, transform=axes[0].transAxes,
+                 bbox=dict(boxstyle='round,pad=0.4', facecolor='white', edgecolor='#cccccc'))
+    axes[0].set_title('Text description')
     axes[0].axis('off')
 
-    rel_vmin, rel_vmax = percentile_range(relative, low_pct, high_pct)
-    im1 = axes[1].imshow(relative, cmap='magma', vmin=rel_vmin, vmax=rel_vmax)
-    axes[1].set_title('Relative depth')
+    axes[1].imshow(rgb)
+    axes[1].set_title('Input image')
     axes[1].axis('off')
-    fig.colorbar(im1, ax=axes[1], fraction=0.046, pad=0.04)
 
-    im2 = axes[2].imshow(scale_map, cmap='hot')
-    axes[2].set_title(f'Scale map\n{scale_map.mean():.4f} ± {scale_map.std():.4f}')
+    rel_vmin, rel_vmax = percentile_range(relative, low_pct, high_pct)
+    im1 = axes[2].imshow(relative, cmap='magma', vmin=rel_vmin, vmax=rel_vmax)
+    axes[2].set_title('Relative depth')
     axes[2].axis('off')
-    fig.colorbar(im2, ax=axes[2], fraction=0.046, pad=0.04)
+    fig.colorbar(im1, ax=axes[2], fraction=0.046, pad=0.04)
 
-    im3 = axes[3].imshow(shift_map, cmap='hot')
-    axes[3].set_title(f'Shift map\n{shift_map.mean():.4f} ± {shift_map.std():.4f}')
+    im2 = axes[3].imshow(scale_map, cmap='hot')
+    axes[3].set_title(f'Scale map\n{scale_map.mean():.4f} ± {scale_map.std():.4f}')
     axes[3].axis('off')
-    fig.colorbar(im3, ax=axes[3], fraction=0.046, pad=0.04)
+    fig.colorbar(im2, ax=axes[3], fraction=0.046, pad=0.04)
+
+    im3 = axes[4].imshow(shift_map, cmap='hot')
+    axes[4].set_title(f'Shift map\n{shift_map.mean():.4f} ± {shift_map.std():.4f}')
+    axes[4].axis('off')
+    fig.colorbar(im3, ax=axes[4], fraction=0.046, pad=0.04)
 
     metric_clipped = np.clip(metric, min_depth, max_depth)
-    im4 = axes[4].imshow(metric_clipped, cmap='magma', vmin=min_depth, vmax=max_depth)
-    axes[4].set_title(f'Metric depth (m)')
-    axes[4].axis('off')
-    fig.colorbar(im4, ax=axes[4], fraction=0.046, pad=0.04)
+    im4 = axes[5].imshow(metric_clipped, cmap='magma', vmin=min_depth, vmax=max_depth)
+    axes[5].set_title(f'Metric depth (m)')
+    axes[5].axis('off')
+    fig.colorbar(im4, ax=axes[5], fraction=0.046, pad=0.04)
 
     plt.tight_layout()
     fig.savefig(out_path, dpi=200, bbox_inches='tight')
@@ -247,7 +255,7 @@ def main():
 
     save_panel(rgb_uint8, relative_np, scale_np, shift_np, metric_np,
                args.vis_low_percentile, args.vis_high_percentile,
-               args.max_depth, args.min_depth, args.output)
+               args.max_depth, args.min_depth, args.output, text=args.text)
     print(f"Saved visualisation to {args.output}")
 
 
