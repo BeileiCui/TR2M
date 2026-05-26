@@ -56,9 +56,13 @@ def parse_args():
     p.add_argument('--input_width', type=int, default=DEFAULT_W,
                    help='Resize width fed to the model (must be a multiple of 14).')
     p.add_argument('--vis_low_percentile', type=float, default=1.0,
-                   help='Lower percentile (per map) for relative- and metric-depth colour ranges.')
+                   help='Lower percentile for relative-depth colour range.')
     p.add_argument('--vis_high_percentile', type=float, default=95.0,
-                   help='Upper percentile (per map) for relative- and metric-depth colour ranges.')
+                   help='Upper percentile for relative-depth colour range.')
+    p.add_argument('--max_depth', type=float, default=10.0,
+                   help='Upper bound (metres) for metric-depth colour mapping.')
+    p.add_argument('--min_depth', type=float, default=1e-3,
+                   help='Lower bound (metres) for metric-depth colour mapping.')
     p.add_argument('--device', default='cuda',
                    help='torch device.')
     # ScaleMap hyperparams (must match training)
@@ -180,7 +184,7 @@ def percentile_range(arr, low_pct, high_pct):
     return vmin, vmax
 
 
-def save_panel(rgb, relative, scale_map, shift_map, metric, low_pct, high_pct, out_path):
+def save_panel(rgb, relative, scale_map, shift_map, metric, low_pct, high_pct, max_depth, min_depth, out_path):
     fig, axes = plt.subplots(1, 5, figsize=(22, 4.5))
 
     axes[0].imshow(rgb)
@@ -189,23 +193,23 @@ def save_panel(rgb, relative, scale_map, shift_map, metric, low_pct, high_pct, o
 
     rel_vmin, rel_vmax = percentile_range(relative, low_pct, high_pct)
     im1 = axes[1].imshow(relative, cmap='magma', vmin=rel_vmin, vmax=rel_vmax)
-    axes[1].set_title(f'Relative depth\n[{low_pct:g}-{high_pct:g} pct: {rel_vmin:.3f}, {rel_vmax:.3f}]')
+    axes[1].set_title('Relative depth')
     axes[1].axis('off')
     fig.colorbar(im1, ax=axes[1], fraction=0.046, pad=0.04)
 
     im2 = axes[2].imshow(scale_map, cmap='hot')
-    axes[2].set_title('Scale map')
+    axes[2].set_title(f'Scale map\n{scale_map.mean():.4f} ± {scale_map.std():.4f}')
     axes[2].axis('off')
     fig.colorbar(im2, ax=axes[2], fraction=0.046, pad=0.04)
 
     im3 = axes[3].imshow(shift_map, cmap='hot')
-    axes[3].set_title('Shift map')
+    axes[3].set_title(f'Shift map\n{shift_map.mean():.4f} ± {shift_map.std():.4f}')
     axes[3].axis('off')
     fig.colorbar(im3, ax=axes[3], fraction=0.046, pad=0.04)
 
-    met_vmin, met_vmax = percentile_range(metric, low_pct, high_pct)
-    im4 = axes[4].imshow(metric, cmap='magma', vmin=met_vmin, vmax=met_vmax)
-    axes[4].set_title(f'Metric depth (m)\n[{low_pct:g}-{high_pct:g} pct: {met_vmin:.3f}, {met_vmax:.3f}]')
+    metric_clipped = np.clip(metric, min_depth, max_depth)
+    im4 = axes[4].imshow(metric_clipped, cmap='magma', vmin=min_depth, vmax=max_depth)
+    axes[4].set_title(f'Metric depth (m)')
     axes[4].axis('off')
     fig.colorbar(im4, ax=axes[4], fraction=0.046, pad=0.04)
 
@@ -219,6 +223,11 @@ def main():
     device = torch.device(args.device if torch.cuda.is_available() or args.device == 'cpu' else 'cpu')
     if device.type != args.device:
         print(f"[warn] CUDA unavailable, falling back to CPU.")
+
+    if device.type == 'cuda':
+        torch.backends.cuda.enable_flash_sdp(False)
+        torch.backends.cuda.enable_mem_efficient_sdp(False)
+        torch.backends.cuda.enable_cudnn_sdp(False)
 
     rgb_uint8, image_tensor, (orig_h, orig_w) = load_image(
         args.image, args.input_height, args.input_width, device
@@ -237,7 +246,8 @@ def main():
           f"max={metric_np.max():.3f} m, mean={metric_np.mean():.3f} m")
 
     save_panel(rgb_uint8, relative_np, scale_np, shift_np, metric_np,
-               args.vis_low_percentile, args.vis_high_percentile, args.output)
+               args.vis_low_percentile, args.vis_high_percentile,
+               args.max_depth, args.min_depth, args.output)
     print(f"Saved visualisation to {args.output}")
 
 
