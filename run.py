@@ -187,9 +187,11 @@ def percentile_range(arr, low_pct, high_pct):
 def save_panel(rgb, relative, scale_map, shift_map, metric, low_pct, high_pct, max_depth, min_depth, out_path, text=''):
     fig, axes = plt.subplots(1, 6, figsize=(26, 4.5))
 
-    # Text panel
+    # Text panel — wrap at ~30 chars per line for readability
+    import textwrap
+    wrapped = '\n'.join(textwrap.wrap(text, width=30))
     axes[0].set_facecolor('#f5f5f5')
-    axes[0].text(0.5, 0.5, text, ha='center', va='center', wrap=True,
+    axes[0].text(0.5, 0.5, wrapped, ha='center', va='center',
                  fontsize=9, transform=axes[0].transAxes,
                  bbox=dict(boxstyle='round,pad=0.4', facecolor='white', edgecolor='#cccccc'))
     axes[0].set_title('Text description')
