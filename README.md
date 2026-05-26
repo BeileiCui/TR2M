@@ -62,7 +62,7 @@ cd TR2M
 conda create -n tr2m python=3.10 -y
 conda activate tr2m
 pip install torch==2.5.0+cu118 torchvision==0.20.0+cu118 --index-url https://download.pytorch.org/whl/cu118
-pip install -r requirements_eval.txt
+pip install -r requirements_eval.txt --upgrade
 ```
 
 The code was tested with PyTorch 2.5.0 + CUDA 11.8 on Python 3.10 (NVIDIA RTX 4090). `torch.hub` is used to load DINOv2 from `facebookresearch/dinov2`, so make sure the host has internet access on first run (or pre-cache the hub directory).
