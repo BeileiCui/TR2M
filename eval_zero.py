@@ -20,7 +20,7 @@ from dataloaders.dataset_simcol import SimCol, change_to_simcol
 from eval_4d import recover_image
 from options import MonodepthOptions
 from scalemap_depth import ScaleMapModel
-from utils import compute_errors, visualize_eval
+from utils import compute_errors, setup_tee_logging, visualize_eval
 
 EPS = 1e-8
 
@@ -153,6 +153,13 @@ def eval(Scalemap_model, depth_model, CLIP_model, Image_f_model, dataloader_eval
 
 
 def main(args):
+    if args.log_file:
+        from datetime import datetime
+        log_path = args.log_file
+        if log_path == 'auto':
+            log_path = f"logs/eval_zero_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+        setup_tee_logging(log_path)
+
     torch.cuda.empty_cache()
     cudnn.benchmark = True
 

@@ -15,6 +15,7 @@ dist/
 
 # Logs / experiment artifacts
 *.log
+logs/
 runs/
 events.out.tfevents.*
 wandb/

@@ -518,3 +518,39 @@ def print_model_parameters(models, model_name="Model", print_or_log="print"):
     ]
     emit = print if print_or_log == "print" else __import__('logging').info
     emit('\n' + '\n'.join(lines))
+
+
+class _Tee:
+    """Write each line to multiple file-like targets (e.g. stdout + a log file)."""
+
+    def __init__(self, *streams):
+        self.streams = streams
+
+    def write(self, data):
+        for s in self.streams:
+            s.write(data)
+            s.flush()
+
+    def flush(self):
+        for s in self.streams:
+            s.flush()
+
+    def isatty(self):
+        return any(getattr(s, 'isatty', lambda: False)() for s in self.streams)
+
+
+def setup_tee_logging(log_path):
+    """Mirror stdout and stderr to *log_path* in addition to the console.
+
+    Returns the open file handle so the caller can close it explicitly if needed
+    (otherwise it stays open until the process exits, which is fine for a script).
+    """
+    import sys
+    log_dir = os.path.dirname(log_path)
+    if log_dir:
+        os.makedirs(log_dir, exist_ok=True)
+    log_file = open(log_path, 'a', buffering=1)  # line-buffered
+    sys.stdout = _Tee(sys.__stdout__, log_file)
+    sys.stderr = _Tee(sys.__stderr__, log_file)
+    print(f"[log] mirroring stdout/stderr to {log_path}")
+    return log_file

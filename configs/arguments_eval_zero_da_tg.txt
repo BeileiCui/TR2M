@@ -20,3 +20,7 @@ ibims_root    = /path/to/iBims1/ibims1_core_raw
 diode_root    = /path/to/DIODE/val/outdoor
 hypersim_root = /path/to/HyperSim
 simcol_root   = /path/to/SimCol
+
+# Mirror stdout/stderr to a log file. Use "auto" for logs/eval_zero_<timestamp>.log,
+# or pass an explicit path. Comment out / leave unset to disable.
+log_file = auto

@@ -269,6 +269,11 @@ class MonodepthOptions:
           self.parser.add_argument('--simcol_root', type=str, default=None,
                                  help='root directory of SimCol')
 
+          # Logging
+          self.parser.add_argument('--log_file', type=str, default=None,
+                                 help='if set, mirror stdout and stderr to this file in addition to the console; '
+                                      'pass "auto" to write to logs/<script>_<timestamp>.log')
+
 
      def parse(self):
           self.options = self.parser.parse_args()

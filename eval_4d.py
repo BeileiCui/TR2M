@@ -19,7 +19,7 @@ from dataloaders.dataset_c3vd import change_to_c3vd
 
 from options import MonodepthOptions
 from scalemap_depth import ScaleMapModel
-from utils import compute_errors, get_text, print_model_parameters, visualize_eval
+from utils import compute_errors, get_text, print_model_parameters, setup_tee_logging, visualize_eval
 
 EPS = 1e-8
 
@@ -207,6 +207,13 @@ def eval(Scalemap_model, depth_model, CLIP_model, Image_f_model, dataloader_eval
 
 
 def main(args):
+    if args.log_file:
+        from datetime import datetime
+        log_path = args.log_file
+        if log_path == 'auto':
+            log_path = f"logs/eval_4d_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+        setup_tee_logging(log_path)
+
     torch.cuda.empty_cache()
     cudnn.benchmark = True
 
