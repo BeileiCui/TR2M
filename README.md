@@ -184,7 +184,7 @@ To dump per-sample visualisations (RGB / GT / relative depth / metric depth / sc
 ## Repository layout (relevant to evaluation)
 
 ```
-eval_indomain.py          in-domain evaluation (NYU/KITTI/VOID/C3VD)
+eval_indomain.py                in-domain evaluation (NYU/KITTI/VOID/C3VD)
 eval_zero.py              zero-shot evaluation (SUNRGB-D/iBims/DIODE/HyperSim/SimCol)
 run.py                    single-image demo (one RGB + one text description)
 options.py                CLI / config parsing (configargparse)

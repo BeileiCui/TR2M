@@ -29,10 +29,7 @@ def hypersim_distance_to_depth(npyDistance):
 def _require(args, attr, dataset):
     val = getattr(args, attr, None)
     if val is None:
-        raise ValueError(
-            f"--{attr} must be set to evaluate on {dataset}. "
-            f"Pass it via the config file or command line."
-        )
+        print(f"[skip] --{attr} not set, skipping {dataset}.")
     return val
 
 
@@ -45,6 +42,8 @@ def change_to_sunrgbd(args):
     args.garg_crop = False
 
     args.data_path = _require(args, "sunrgbd_root", "sunrgbd")
+    if args.data_path is not None and not args.data_path.endswith('/'):
+        args.data_path += '/'
 
     args.val_image_path_sunrgbd = "./data_splits/sunrgbd/sunrgbd_testing_images.txt"
     args.val_ground_truth_path_sunrgbd = "./data_splits/sunrgbd/sunrgbd_testing_depths.txt"

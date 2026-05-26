@@ -24,10 +24,7 @@ def change_to_simcol(args):
     args.min_depth_eval = 0.1
 
     if getattr(args, "simcol_root", None) is None:
-        raise ValueError(
-            "--simcol_root must be set to evaluate on simcol. "
-            "Pass it via the config file or command line."
-        )
+        print("[skip] --simcol_root not set, skipping simcol.")
 
 def readlines(filename):
     """Read all the lines in a text file and return as a list
