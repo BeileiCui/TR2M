@@ -35,6 +35,25 @@ Image and text features are extracted by frozen DINOv2 and CLIP encoders, fused 
 - **2026.05.25** — Evaluation code and pretrained weights are released.
 - **2026.02.20** — Paper accepted to **CVPR 2026**.
 
+## Results
+
+### In-domain
+
+| Dataset | δ₁ ↑ | δ₂ ↑ | δ₃ ↑ | abs_rel ↓ | log10 ↓ | rmse ↓ |
+| --- | --- | --- | --- | --- | --- | --- |
+| NYU Depth V2 | 0.954 | 0.996 | 0.999 | 0.082 | 0.035 | 0.293 |
+
+| Dataset | δ₁ ↑ | δ₂ ↑ | δ₃ ↑ | abs_rel ↓ | RMSElog ↓ | rmse ↓ |
+| --- | --- | --- | --- | --- | --- | --- |
+| KITTI | 0.965 | 0.996 | 0.999 | 0.066 | 0.093 | 2.328 |
+
+### Zero-shot
+
+| Method | SUN RGB-D | | iBims-1 | | HyperSim | | DIODE Outdoor | | SimCol | |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| | abs_rel ↓ | δ₁ ↑ | abs_rel ↓ | δ₁ ↑ | abs_rel ↓ | δ₁ ↑ | abs_rel ↓ | δ₁ ↑ | abs_rel ↓ | δ₁ ↑ |
+| TR2M | 0.451 | 0.591 | 0.154 | 0.736 | 0.357 | 0.361 | 0.673 | 0.274 | 0.284 | 0.445 |
+
 ## Installation
 
 ```bash
