@@ -202,15 +202,18 @@ class ScaleMapModel(nn.Module):
         self.init_weights()
 
     def init_weights(self):
-        if isinstance(self, nn.Conv2d):
-            nn.init.kaiming_normal_(self.weight, mode='fan_out', nonlinearity='relu')
-        elif isinstance(self, nn.BatchNorm2d):
-            nn.init.ones_(self.weight)
-            nn.init.zeros_(self.bias)
-        elif isinstance(self, nn.Linear):
-            nn.init.xavier_normal_(self.weight)
-            if self.bias is not None:
-                nn.init.zeros_(self.bias)
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.ones_(m.weight)
+                nn.init.zeros_(m.bias)
+            elif isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight)
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
 
     def forward(self, img_features, text_features, patch_h, patch_w):
         if self.align_text_image:
